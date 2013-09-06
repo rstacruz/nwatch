@@ -5,7 +5,7 @@ var cli = require('commander');
 var fs = require('fs');
 
 cli
-  .version('0.0.1')
+  .version(require('../package').version)
   .usage('[options] <cmd>')
   .option('-q, --quiet', 'only output stderr')
   .option('-x, --halt', 'halt on failure')
