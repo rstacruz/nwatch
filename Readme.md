@@ -39,6 +39,8 @@ This command will re-run `make` every time any file changes:
   * [visionmedia/watch] - works exactly the same, except it's a C program.
   * [watch-js] - has more features geared towards web development like 
   LiveReload.
+  * [supervisor] - invokes a node script (instead of an arbitrary command). also 
+  has features like auto-restart on exit.
 
 ## Acknowledgements
 
@@ -48,3 +50,4 @@ This command will re-run `make` every time any file changes:
 [visionmedia/watch]: https://github.com/visionmedia/watch
 [watch(1)]: http://linux.die.net/man/1/watch
 [watch-js]: https://github.com/stagas/watch-js
+[supervisor]: https://github.com/isaacs/node-supervisor
