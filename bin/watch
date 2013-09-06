@@ -1,0 +1,120 @@
+#!/usr/bin/env node
+var spawn = require('child_process').spawn;
+var watch = require('chokidar').watch;
+var cli = require('commander');
+var fs = require('fs');
+
+cli
+  .version('0.0.1')
+  .usage('[options] <cmd>')
+  .option('-q, --quiet', 'only output stderr')
+  .option('-x, --halt', 'halt on failure')
+  .option('-d, --dir [dir]', 'directory to watch', '.')
+  .option('-i, --immediate', 'run the command immediately as well')
+  .option('-v, --verbose', 'show when a command will be ran')
+  .parse(process.argv);
+
+cli.on('--help', function() {
+  console.log('  Examples:');
+  console.log('');
+  console.log("    $ watch make               # run 'make' on any changes");
+  console.log("    $ watch -q -- cmd -q       # run 'cmd -q' on any changes");
+  console.log("    $ watch -d app rake test   # run 'rake test' when 'app/' changes");
+  console.log('');
+});
+
+if (cli.args.length === 0) {
+  cli.outputHelp();
+  process.exit(0);
+}
+
+watchPath(cli);
+
+/**
+ * Starts watching.
+ */
+
+function watchPath(options) {
+  if (options.verbose) console.log('  .. watching files under', options.dir);
+  if (options.immediate) runCommand(options);
+
+  // Start watching
+  var watcher = watch(options.dir, { persistent: true, ignoreInitial: true });
+  watcher.on('error', function(error) { console.error('  !  ', error); })
+
+  // Defer actual responding until the 'initial' watcher stuff get executed
+  setTimeout(function() {
+    if (options.verbose) {
+      watcher
+        .on('add',    function(path) { console.log('  .. added: ', path); })
+        .on('change', function(path) { console.log('  .. changed:', path); })
+        .on('unlink', function(path) { console.log('  .. removed:', path); });
+    }
+
+    watcher
+      .on('add',    function(path) { runCommand(options); })
+      .on('change', function(path) { runCommand(options); })
+      .on('unlink', function(path) { runCommand(options); });
+  }, 100);
+
+  return watcher;
+}
+
+/**
+ * Runs the command given in `cli` with the options in `cli`.
+ */
+
+function runCommand(options) {
+  if (options.verbose) {
+    console.log('  .. invoking:', options.args.join(' '));
+  }
+  run(options.args, { quiet: options.quiet }, function(err, code) {
+    if (!err && code > 0 && options.verbose) {
+      console.error('  !  process exited with code', code);
+    }
+
+    if (options.halt) {
+      if (err) process.exit(26);
+      if (code) process.exit(code);
+    }
+  });
+}
+
+/**
+ * Runs a given command.
+ *
+ * Possible options:
+ *
+ *  - `quiet` (bool) - supresses stdout when set to true
+ *
+ * Example:
+ *
+ *     run(['make', 'all', '-b'], {}, function(err, code) {
+ *       console.log("Exited with code", code);
+ *     });
+ */
+
+function run(args, options, callback) {
+  var bin  = args[0];
+  var argv = args.slice(1);
+
+  // Figure out which stdio streams to pass onto the child process
+  var stdio = 'inherit';
+  if (options.quiet) stdio = [process.stdin, null, process.stdout];
+
+  // Spawn a new process
+  var proc = spawn(bin, argv, { stdio: stdio });
+
+  proc.on('error', function(err) {
+    if (err.code === "ENOENT") {
+      console.error('\n  !  %s(1) does not exist\n', bin);
+    } else if (err.code === "EACCES") {
+      console.error('\n  !  %s(1) is not executable\n', bin);
+    }
+    if (callback) callback(err);
+  });
+
+  proc.on('exit', function(code) {
+    if (callback) callback(null, code);
+  });
+}

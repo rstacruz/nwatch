@@ -1,0 +1,29 @@
+{
+  "name": "livemarkup",
+  "description": "Minimalistic utility to run a command when filesystem updates happen",
+  "keywords": [
+    "watch"
+  ],
+  "author": "Rico Sta. Cruz <hi@ricostacruz.com>",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rstacruz/node-watch.git"
+  },
+  "main": "index",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha -R spec"
+  },
+  "dependencies": {
+    "commander": "2.x",
+    "chokidar": "~0.6.3"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "chai": "*"
+  },
+  "bin": {
+    "watch": "./bin/watch"
+  },
+  "license": "MIT"
+}
