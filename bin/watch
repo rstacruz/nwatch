@@ -11,6 +11,7 @@ cli
   .option('-x, --halt', 'halt on failure')
   .option('-d, --dir [dir]', 'directory to watch', '.')
   .option('-b, --before', 'run the command before watching as well')
+  .option('-i, --interval <n>', 'polling interval (in milliseconds) [1000]', 1000)
   .option('-v, --verbose', 'show when a command will be ran')
   .parse(process.argv);
 
@@ -39,7 +40,12 @@ function watchPath(options) {
   if (options.before) runCommand(options);
 
   // Start watching
-  var watcher = watch(options.dir, { persistent: true, ignoreInitial: true });
+  var watcher = watch(options.dir, {
+    persistent: true,
+    ignoreInitial: true,
+    interval: options.interval
+  });
+
   watcher.on('error', function(error) { console.error('  !  ', error); })
 
   // Defer actual responding until the 'initial' watcher stuff get executed
