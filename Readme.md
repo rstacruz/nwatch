@@ -10,6 +10,12 @@ Node.js v0.10+.
 Consider this a cross-platform Node.js-powered port of [visionmedia/watch],
 and a cross-platform version of the Linux [watch(1)] utility.
 
+Features:
+
+ * cross-platform (works anywhere node.js can)
+ * invokes any shell command
+ * no other fancy features
+
 ## Usage
 
 Invoke `nwatch <command>` to run the given command when any files change in the 
