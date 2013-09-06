@@ -3,7 +3,7 @@
 Minimalistic utility to run a command when filesystem updates happen. Requires 
 Node.js v0.10+.
 
-    $ npm install -g nwatch
+    $ npm install -g rstacruz/nwatch
 
 ## About
 
