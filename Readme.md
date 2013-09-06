@@ -34,6 +34,12 @@ This command will re-run `make` every time any file changes:
       -i, --interval <n>  polling interval (in milliseconds) [1000]
       -v, --verbose       show when a command will be ran
 
+## Alternatives
+
+  * [visionmedia/watch] - works exactly the same, except it's a C program.
+  * [watch-js] - has more features geared towards web development like 
+  LiveReload.
+
 ## Acknowledgements
 
 © 2013, Rico Sta. Cruz. Released under the [MIT License].
@@ -41,3 +47,4 @@ This command will re-run `make` every time any file changes:
 [MIT License]: http://www.opensource.org/licenses/mit-license.php
 [visionmedia/watch]: https://github.com/visionmedia/watch
 [watch(1)]: http://linux.die.net/man/1/watch
+[watch-js]: https://github.com/stagas/watch-js
