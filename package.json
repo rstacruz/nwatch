@@ -1,5 +1,5 @@
 {
-  "name": "livemarkup",
+  "name": "nwatch",
   "description": "Minimalistic utility to run a command when filesystem updates happen",
   "keywords": [
     "watch"
@@ -23,7 +23,7 @@
     "chai": "*"
   },
   "bin": {
-    "watch": "./bin/watch"
+    "nwatch": "./bin/nwatch"
   },
   "license": "MIT"
 }
